@@ -25,7 +25,7 @@ export default function ( { params }: Props ) {
 
   const { id } = params;
 
-  // Todo: verificar
+  //TODO: verificar
   // redirect(/)
 
 
