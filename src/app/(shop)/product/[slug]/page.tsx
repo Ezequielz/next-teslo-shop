@@ -1,8 +1,12 @@
+export const revalidate = 604800 // 7 dias
+
+
+import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { initialData } from '@/seed/seed';
 import { titleFont } from '@/config/fonts';
-import { ProductMobileSlideshow, ProductSlideshow, QuantitySelector, SizeSelector } from '@/components';
+import { ProductMobileSlideshow, ProductSlideshow, QuantitySelector, SizeSelector, StockLabel } from '@/components';
+import { getProductBySlug } from '@/actions';
 
 interface Props {
   params: {
@@ -11,13 +15,38 @@ interface Props {
 }
 
 
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  // read route params
+  const slug = params.slug
 
-export default function ( { params }: Props ) {
+  // fetch data
+  const product = await getProductBySlug(slug)
+
+  // optionally access and extend (rather than replace) parent metadata
+  // const previousImages = (await parent).openGraph?.images || []
+
+  return {
+    title: product?.title ?? 'Producto no encontrado',
+    description: product?.description ?? 'Producto no encontrado',
+    openGraph: {
+      title: product?.title ?? 'Producto no encontrado',
+      description: product?.description ?? 'Producto no encontrado',
+      images: [`/products/${ product?.images[1] }`], // https://misitio.com/products/image.png
+    },
+  }
+}
+
+
+
+export default async function ({ params }: Props) {
 
   const { slug } = params;
-  const product = initialData.products.find( product => product.slug === slug );
+  const product = await getProductBySlug(slug)
 
-  if ( !product ) {
+  if (!product) {
     notFound();
   }
 
@@ -26,56 +55,57 @@ export default function ( { params }: Props ) {
   return (
     <div className="mt-5 mb-20 grid grid-cols-1 md:grid-cols-3 gap-3">
 
-      {/* Slideshow */ }
+      {/* Slideshow */}
       <div className="col-span-1 md:col-span-2 ">
-        
+
         {/* Mobile Slideshow */}
-        <ProductMobileSlideshow 
-          title={ product.title }
-          images={ product.images }
+        <ProductMobileSlideshow
+          title={product.title}
+          images={product.images}
           className="block md:hidden"
         />
-        
+
         {/* Desktop Slideshow */}
-        <ProductSlideshow 
-          title={ product.title }
-          images={ product.images }
+        <ProductSlideshow
+          title={product.title}
+          images={product.images}
           className="hidden md:block"
         />
 
-        
+
       </div>
 
-      {/* Detalles */ }
+      {/* Detalles */}
       <div className="col-span-1 px-5">
 
-        <h1 className={ ` ${ titleFont.className } antialiased font-bold text-xl` }>
-          { product.title }
+        <StockLabel slug={product.slug} />
+        <h1 className={` ${titleFont.className} antialiased font-bold text-xl`}>
+          {product.title}
         </h1>
-        <p className="text-lg mb-5">${ product.price }</p>
+        <p className="text-lg mb-5">${product.price}</p>
 
-        {/* Selector de Tallas */ }
+        {/* Selector de Tallas */}
         <SizeSelector
-          selectedSize={ product.sizes[ 1 ] }
-          availableSizes={ product.sizes }
+          selectedSize={product.sizes[1]}
+          availableSizes={product.sizes}
         />
 
 
-        {/* Selector de Cantidad */ }
-        <QuantitySelector 
-          quantity={ 2 }
+        {/* Selector de Cantidad */}
+        <QuantitySelector
+          quantity={2}
         />
 
 
-        {/* Button */ }
+        {/* Button */}
         <button className="btn-primary my-5">
           Agregar al carrito
         </button>
 
-        {/* Descripción */ }
+        {/* Descripción */}
         <h3 className="font-bold text-sm">Descripción</h3>
         <p className="font-light">
-          { product.description }
+          {product.description}
         </p>
 
       </div>
