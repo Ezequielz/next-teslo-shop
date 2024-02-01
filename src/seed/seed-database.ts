@@ -1,23 +1,36 @@
-import { initialData } from "./seed";
 import prisma from '../lib/prisma';
+import { initialData } from "./seed";
+import { countries } from "./seed-countries";
 
 
 
 async function main() {
     // Borrar todos los registros previos
     // await Promise.all([
-       await prisma.productImage.deleteMany();
-       await prisma.product.deleteMany();
-       await prisma.category.deleteMany();
+    await prisma.userAddress.deleteMany();    
+    await prisma.user.deleteMany();
+    await prisma.country.deleteMany()
+    await prisma.productImage.deleteMany();
+    await prisma.product.deleteMany();
+    await prisma.category.deleteMany();
     // ])
 
-    const { categories, products } = initialData
+    const { categories, products, users } = initialData
+
+    await prisma.user.createMany({
+        data: users
+    });
+
+    await prisma.country.createMany({
+        data: countries
+    })
+
     // Categorias
 
     // {
     //     name: 'Shirt'
     // }
-    const categoriesData = categories.map( category => ({
+    const categoriesData = categories.map(category => ({
         name: category
     }));
 
@@ -26,10 +39,10 @@ async function main() {
     });
 
     const categoriesDB = await prisma.category.findMany();
-    const categoriesMap = categoriesDB.reduce( (map, category ) => {
+    const categoriesMap = categoriesDB.reduce((map, category) => {
 
         map[category.name.toLowerCase()] = category.id;
-    
+
         return map;
     }, {} as Record<string, string>); // < string=shirt, string=categoryID >
 
@@ -37,8 +50,8 @@ async function main() {
     // Productos
 
 
-    products.forEach( async(product) => {
-        const { images, type,  ...rest } = product;
+    products.forEach(async (product) => {
+        const { images, type, ...rest } = product;
 
         const dbProduct = await prisma.product.create({
             data: {
@@ -48,7 +61,7 @@ async function main() {
         });
 
         // Images
-        const imagesData = images.map( image => ({
+        const imagesData = images.map(image => ({
             url: image,
             productId: dbProduct.id
         }));

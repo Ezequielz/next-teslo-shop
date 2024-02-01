@@ -12,6 +12,7 @@ __Ecomerce clon de Tesla, del curso de [Fernando Herrera Next 14](https://cursos
 4. levantar la base de datos ```docker compose up -d```
 5. Correr las migraciones de [Prisma](https://www.prisma.io/) ```npx prisma migrate dev```
 6. Ejecutar seed ```npm run seed```
-7. Correr el proyecto ```npm run dev```
+7. Limpiar el localStorage del navegador
+8. Correr el proyecto ```npm run dev```
 
 ## Correr en prod
