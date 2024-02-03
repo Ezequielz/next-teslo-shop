@@ -15,4 +15,14 @@ __Ecomerce clon de Tesla, del curso de [Fernando Herrera Next 14](https://cursos
 7. Limpiar el localStorage del navegador
 8. Correr el proyecto ```npm run dev```
 
+
+
+### Nota
+Para simular un pago con paypal, usar el usuario para pruebas en desarrollo:
+```
+usuario: eche@gmail.com 
+password: ASD123456
+```
+
+
 ## Correr en prod
