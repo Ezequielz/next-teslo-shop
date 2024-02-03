@@ -5,7 +5,10 @@
 export * from './products/product-grid/ProductGrid';
 export * from './products/product-grid/ProductGridItem';
 
-export * from './provider/Provider';
+export * from './paypal/PaypalButton';
+export * from './orders/OrderStatus';
+
+export * from './providers/Providers';
 
 export * from './product/slideshow/ProductMobileSlideshow';
 export * from './product/slideshow/ProductSlideshow';
