@@ -6,10 +6,13 @@ import clsx from "clsx"
 import { useAddressStore, useCartStore } from "@/store"
 import { currencyFormat } from "@/utils"
 import { placeOrder } from "@/actions"
+import { useRouter } from "next/navigation"
 
 export const PlaceOrder = () => {
 
+    const router = useRouter();
     const [loaded, setLoaded] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
     const [isPlacingOrder, setIsPlacingOrder] = useState(false)
 
     const address = useAddressStore(state => state.address);
@@ -19,6 +22,7 @@ export const PlaceOrder = () => {
     );
 
     const cart = useCartStore( state => state.cart )
+    const clearCart = useCartStore( state => state.clearCart )
 
 
     useEffect(() => {
@@ -34,13 +38,19 @@ export const PlaceOrder = () => {
             size: product.size
         }))
 
-        console.log({productsToOrder})
-
+        //! Server Action
         const resp = await placeOrder( productsToOrder, address );
-        console.log({resp})
+        if ( !resp.ok ) {
+            setIsPlacingOrder(false)
+            setErrorMessage( resp.message );
+            return
+        }
 
+        //* Todo salio bien
 
-        setIsPlacingOrder(false)
+        clearCart();
+        router.replace('/orders/' + resp.order?.id);
+
     }
 
 
@@ -102,7 +112,7 @@ export const PlaceOrder = () => {
                     </span>
                 </p>
 
-                <p className="text-red-500">Error de creación</p>
+                <p className="text-red-500">{ errorMessage }</p>
 
 
                 <button
