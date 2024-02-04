@@ -137,7 +137,8 @@ export const Sidebar = () => {
               </Link>
 
               <Link
-                href="/"
+                href="/admin/orders"
+                onClick={() => closeMenu()}
                 className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
               >
                 <IoTicketOutline size={30} />
@@ -145,7 +146,8 @@ export const Sidebar = () => {
               </Link>
 
               <Link
-                href="/"
+                href="/admin/users"
+                onClick={() => closeMenu()}
                 className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
               >
                 <IoPeopleOutline size={30} />
