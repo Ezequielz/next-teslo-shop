@@ -22,7 +22,6 @@ export const deleteProductImage = async( imageId: number, imageUrl: string ) => 
 
 
     try {
-    //    await cloudinary.uploader.destroy( `tesloShop/${imageName}` );
         
         // borrar imagen de base de datos
         const deleteImage = await prisma.productImage.delete({
@@ -38,13 +37,11 @@ export const deleteProductImage = async( imageId: number, imageUrl: string ) => 
                 }
             }
         });
-       
+        
         // eliminar imagen de cloudinary si se elimino de base de datos
         if ( deleteImage.product) {
-            console.log('first')
-           const a = await cloudinary.uploader.destroy( `tesloShop/${imageName}` );
+          await cloudinary.uploader.destroy( `tesloShop/${imageName}` );
 
-           console.log({a})
         }
         // Revalidar paths
 
