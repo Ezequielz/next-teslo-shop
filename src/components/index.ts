@@ -10,6 +10,7 @@ export * from './orders/OrderStatus';
 
 export * from './providers/Providers';
 
+export * from './product/product-image/ProductImage';
 export * from './product/slideshow/ProductMobileSlideshow';
 export * from './product/slideshow/ProductSlideshow';
 export * from './product/stock-label/StockLabel';
