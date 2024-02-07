@@ -6,7 +6,10 @@ interface Props {
     className?: React.StyleHTMLAttributes<HTMLImageElement>['className'];
     width: number;
     height: number;
+    priority?: boolean;
     style?: React.StyleHTMLAttributes<HTMLImageElement>['style'];
+    onMouseLeave?: () => void;
+    onMouseEnter?: () => void
 }
 
 export const ProductImage = ({
@@ -15,24 +18,30 @@ export const ProductImage = ({
     className,
     width,
     height,
-    style
+    style,
+    priority,
+    onMouseLeave,
+    onMouseEnter
 }: Props) => {
-
-    const localSrc = ( src )
+   
+    
+    const localSrc = (src)
         ? src.startsWith('http') // https://urlCompletoDeLaImagen.jpg
             ? src
             : `/products/${src}`
         : '/imgs/placeholder.jpg'
-
-
+      
     return (
         <Image
-            src={ localSrc }
+            src={localSrc}
             width={width}
             height={height}
             alt={alt}
-            className={ className }
-            style={ style }
+            priority={priority}
+            className={className}
+            style={style}
+            onMouseLeave={onMouseLeave}
+            onMouseEnter={onMouseEnter}
         />
     )
 }

@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+
 'use client'
 
 import { getStockBySlug } from "@/actions";
@@ -16,16 +16,14 @@ export const StockLabel = ({ slug }: Props) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        const getStock = async () => {
+
+            const inStock = await getStockBySlug(slug);
+            setStock(inStock);
+            setIsLoading(false);
+        }
         getStock()
-    }, []);
-
-
-    const getStock = async () => {
-
-        const inStock = await getStockBySlug(slug);
-        setStock(inStock);
-        setIsLoading(false);
-    }
+    }, [slug]);
 
 
     return (
